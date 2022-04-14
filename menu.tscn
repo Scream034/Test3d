@@ -1,0 +1,32 @@
+[gd_scene format=2]
+
+[node name="menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="bg" type="ColorRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -160.0
+margin_top = -160.0
+margin_right = 160.0
+margin_bottom = 160.0
+size_flags_vertical = 3
+color = Color( 0.180392, 0.180392, 0.180392, 0.352941 )
+
+[node name="type_obj" type="VBoxContainer" parent="bg"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="cube" type="Button" parent="bg/type_obj"]
+margin_right = 320.0
+margin_bottom = 158.0
+size_flags_vertical = 3
+
+[node name="floor" type="Button" parent="bg/type_obj"]
+margin_top = 162.0
+margin_right = 320.0
+margin_bottom = 320.0
+size_flags_vertical = 3

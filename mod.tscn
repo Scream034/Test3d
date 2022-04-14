@@ -1,0 +1,6 @@
+[gd_scene format=2]
+
+[node name="mod" type="CSGBox"]
+width = 0.2
+height = 0.2
+depth = 0.2

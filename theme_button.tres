@@ -1,0 +1,17 @@
+[gd_resource type="Theme" load_steps=5 format=2]
+
+[ext_resource path="res://Resources/StyleBoxFlats/button_in_create_normal.tres" type="StyleBox" id=2]
+[ext_resource path="res://Resources/StyleBoxFlats/button_in_create_hover.tres" type="StyleBox" id=3]
+[ext_resource path="res://Resources/Fonts/Leto_text_normal.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Resources/StyleBoxFlats/button_in_create_pressed.tres" type="StyleBox" id=5]
+
+[resource]
+Button/colors/font_color = Color( 0.517647, 0.517647, 0.517647, 1 )
+Button/colors/font_color_focus = Color( 0.27451, 0.92549, 0.976471, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/fonts/font = ExtResource( 4 )
+Button/styles/hover = ExtResource( 3 )
+Button/styles/normal = ExtResource( 2 )
+Button/styles/pressed = ExtResource( 5 )
+Fonts/fonts/large = null
+Fonts/fonts/normal = null
