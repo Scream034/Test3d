@@ -1,9 +1,9 @@
 [gd_resource type="Theme" load_steps=5 format=2]
 
-[ext_resource path="res://Resources/StyleBoxFlats/button_in_create_normal.tres" type="StyleBox" id=2]
-[ext_resource path="res://Resources/StyleBoxFlats/button_in_create_hover.tres" type="StyleBox" id=3]
-[ext_resource path="res://Resources/Fonts/Leto_text_normal.tres" type="DynamicFont" id=4]
-[ext_resource path="res://Resources/StyleBoxFlats/button_in_create_pressed.tres" type="StyleBox" id=5]
+[ext_resource path="res://button_in_create_normal.tres" type="StyleBox" id=2]
+[ext_resource path="res://button_in_create_hover.tres" type="StyleBox" id=3]
+[ext_resource path="res://Leto_text_normal.tres" type="DynamicFont" id=4]
+[ext_resource path="res://button_in_create_pressed.tres" type="StyleBox" id=5]
 
 [resource]
 Button/colors/font_color = Color( 0.517647, 0.517647, 0.517647, 1 )

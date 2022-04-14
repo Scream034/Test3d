@@ -11,8 +11,17 @@ config_version=4
 [application]
 
 config/name="test3d"
-run/main_scene="res://Scenes/map.tscn"
+config/description="made by Scream or pralax!"
+run/main_scene="res://map.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1366
+window/size/height=768
+window/size/fullscreen=true
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
 
 [input]
 
@@ -80,4 +89,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-environment/default_environment="res://Weathers/default_env.tres"
+quality/filters/anisotropic_filter_level=6
+environment/default_environment="res://default_env.tres"

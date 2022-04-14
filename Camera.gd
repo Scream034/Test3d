@@ -15,7 +15,7 @@ onready var timer_fire = $timer
 onready var timer_recoil = $timer2
 onready var timer_recoil_switch = $timer2/timer
 onready var timer_recoil_switch_2 = $timer2/timer2
-onready var model = preload("res://Scenes/mod.tscn")
+onready var model = preload("res://mod.tscn")
 
 # 2 move
 onready var move = KinematicBody.new()
@@ -26,17 +26,20 @@ export var move_vel: Vector3
 func _process(delta):
 	# rotate
 	mouse_position.y = clamp(mouse_position.y, -1150, 1150)
+	
 	# fire
 	if Input.is_action_pressed("ui_select"):
 		if timer_recoil.is_stopped():
 			timer_recoil.start(0.24)
 		mouse_position = lerp(mouse_position, Vector2(mouse_position.x + mouse_position_recoil, mouse_position.y - 4.5), 0.23)
+		
 		if raycast.get_collider():
 			if timer_fire.is_stopped():
 				timer_fire.start(rand_range(0.07, 0.13))
 	else:
 		mouse_position_recoil_switch = 0
 		mouse_position_recoil = 0
+	
 	if mouse_position_recoil_switch == 1:
 		mouse_position_recoil = 1.25
 	elif mouse_position_recoil_switch == 2:
@@ -75,6 +78,7 @@ func _physics_process(delta):
 func _ready():
 	timer_fire.connect("timeout", self, "set_position_bullet")
 	timer_recoil.connect("timeout", self, "set_recoil")
+	# recoil switch
 	timer_recoil_switch.connect("timeout", self, "set_mouse_switch_position", [1])
 	timer_recoil_switch_2.connect("timeout", self, "set_mouse_switch_position", [2])
 
@@ -85,6 +89,11 @@ func _input(event):
 		mouse_position.y = clamp(mouse_position.y, -1150, 1150)
 
 
+# >>> >>> >>>              <<< <<< <<< #
+#           custom functions
+# >>> >>> >>>              <<< <<< <<< #
+
+
 func set_position_at_camera():
 	move.transform.origin = transform.origin
 
@@ -93,6 +102,24 @@ func set_position_bullet():
 	var bullet = model.instance()
 	get_node("/root").add_child(bullet)
 	bullet.transform.origin = raycast.get_collision_point()
+	if raycast.get_collider():
+			# add position
+		# to y
+		if raycast.get_collision_normal().y == 1:
+			bullet.transform.origin.y += 0.1
+		elif raycast.get_collision_normal().y == -1:
+			bullet.transform.origin.y -= 0.1
+		#to x
+		elif raycast.get_collision_normal().x == -1:
+			bullet.transform.origin.x -= 0.1
+		elif raycast.get_collision_normal().x == 1:
+			bullet.transform.origin.x += 0.1
+		# to z
+		elif raycast.get_collision_normal().z == 1:
+			bullet.transform.origin.z += 0.1
+		elif raycast.get_collision_normal().z == -1:
+			bullet.transform.origin.z -= 0.1
+		print(raycast.get_collision_normal())
 
 func set_recoil():
 	if mouse_position_recoil_switch == 0:
