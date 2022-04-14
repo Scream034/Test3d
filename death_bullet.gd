@@ -2,8 +2,7 @@ extends CSGBox
 
 func _ready():
 	$timer.start(rand_range(0.8, 4))
-	$timer.connect("timeout", self, "_death")
+	$timer.connect("timeout", self, "_Death")
 
-func _death():
+func _Death():
 	queue_free()
-

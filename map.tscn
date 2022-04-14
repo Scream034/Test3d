@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Camera.gd" type="Script" id=1]
+[ext_resource path="res://Leto_text_normal.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Control.gd" type="Script" id=3]
 [ext_resource path="res://menu.tscn" type="PackedScene" id=4]
 
@@ -10,6 +11,30 @@
 render_priority = 1
 blend_mode = 1
 light_mode = 2
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends RichTextLabel
+
+var is_visible = true
+var alpha: float
+
+func _physics_process(delta):
+	if !is_visible:
+		alpha -= 0.004 if alpha > 0 else 0
+		add_color_override(\"default_color\", ColorN('lime', alpha))
+	if alpha <= 0:
+		queue_free()
+
+func _ready():
+	alpha = 1
+	$timer.start(4.24)
+	add_color_override(\"default_color\", ColorN('lime', alpha))
+	$timer.connect(\"timeout\", self, \"set_visible\", [false])
+
+func set_visible(_visible):
+	is_visible = _visible
+
+"
 
 [sub_resource type="SpatialMaterial" id=5]
 flags_transparent = true
@@ -40,8 +65,31 @@ anchor_bottom = 1.0
 script = ExtResource( 3 )
 
 [node name="Label" type="Label" parent="Camera/Control"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
 margin_right = 40.0
-margin_bottom = 14.0
+custom_colors/font_color = Color( 0.113725, 1, 0, 1 )
+
+[node name="check" type="Label" parent="Camera/Control"]
+anchor_right = 1.0
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0.172549, 1, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "has object:  "
+align = 1
+uppercase = true
+
+[node name="check2" type="Label" parent="Camera/Control/check"]
+anchor_right = 1.0
+margin_left = 74.0
+margin_right = 74.0
+margin_bottom = 16.0
+custom_colors/font_color = Color( 1, 0, 0.294118, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "false"
+align = 1
+uppercase = true
 
 [node name="crosshair" type="ColorRect" parent="Camera/Control"]
 material = SubResource( 4 )
@@ -54,6 +102,32 @@ margin_top = -4.0
 margin_right = 4.0
 margin_bottom = 4.0
 color = Color( 0.231373, 0.784314, 0.317647, 0.423529 )
+
+[node name="info" type="RichTextLabel" parent="Camera/Control"]
+anchor_bottom = 1.0
+margin_right = 266.0
+custom_constants/line_separation = 12
+text = "This project is test!
+Don't kill me.
+
+	Controls
+1. Menu - E
+2. Movement:
+ 2.1 Forward - W
+ 2.2 Backward - S
+ 2.3 Left - A
+ 2.4 Right - D
+3. Select position - LEFT CLICK to mouse
+4. Restart - R
+
+   made  by @paralax or @Scream034
+				GOOD LUCK!
+
+"
+scroll_active = false
+script = SubResource( 6 )
+
+[node name="timer" type="Timer" parent="Camera/Control/info"]
 
 [node name="menu" parent="Camera" instance=ExtResource( 4 )]
 

@@ -1,5 +1,7 @@
 extends Camera
 
+var is_menu = false
+
 export var mouse_position: Vector2
 export var dir: Vector3
 export var mouse_position_recoil: float
@@ -21,6 +23,8 @@ onready var model = preload("res://mod.tscn")
 onready var move = KinematicBody.new()
 export var move_vel: Vector3
 
+# for create cube
+export var cast: Vector3
 
 
 func _process(delta):
@@ -28,12 +32,13 @@ func _process(delta):
 	mouse_position.y = clamp(mouse_position.y, -1150, 1150)
 	
 	# fire
-	if Input.is_action_pressed("ui_select"):
+	if Input.is_action_pressed("ui_select") and !is_menu:
 		if timer_recoil.is_stopped():
 			timer_recoil.start(0.24)
 		mouse_position = lerp(mouse_position, Vector2(mouse_position.x + mouse_position_recoil, mouse_position.y - 4.5), 0.23)
 		
 		if raycast.get_collider():
+			cast = raycast.get_collision_point()
 			if timer_fire.is_stopped():
 				timer_fire.start(rand_range(0.07, 0.13))
 	else:
@@ -63,7 +68,9 @@ func _physics_process(delta):
 		translation += dir * speed * delta
 		move.transform.origin = transform.origin
 	else:
-		get_parent().add_child(move)
+		if !get_parent().has_node("@@3"): # @ - parent
+			get_parent().add_child(move)
+
 		
 		if dir.length() > 0.94:
 			dir /= dir.length()
