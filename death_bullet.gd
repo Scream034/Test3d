@@ -1,4 +1,4 @@
-extends CSGBox
+extends CSGCylinder
 
 func _ready():
 	$timer.start(rand_range(0.8, 4))

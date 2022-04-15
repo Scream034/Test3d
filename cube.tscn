@@ -1,7 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene format=2]
 
-[sub_resource type="CubeMesh" id=1]
-
-[node name="cube" type="MeshInstance"]
-mesh = SubResource( 1 )
-material/0 = null
+[node name="cube" type="CSGBox"]
+width = 1.5
+height = 1.5
+depth = 1.5

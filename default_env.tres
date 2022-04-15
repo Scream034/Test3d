@@ -14,7 +14,11 @@ sun_angle_max = 165.0
 [resource]
 background_mode = 2
 background_sky = SubResource( 1 )
+background_energy = 0.96
 ambient_light_energy = 1.24
+dof_blur_far_enabled = true
+dof_blur_far_distance = 750.0
+glow_enabled = true
 adjustment_enabled = true
 adjustment_brightness = 1.1
 adjustment_contrast = 0.9

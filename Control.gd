@@ -2,9 +2,6 @@ extends Control
 
 
 var pressed: bool
-# cube
-var is_create_cube: bool
-var cube = null
 export var cast: Vector3
 export var cast_global: Vector3
 
@@ -15,10 +12,21 @@ onready var raycast = get_parent().get_node("RayCast")
 onready var camera = get_parent()
 
 
+	# creates
+var is_create = false
+var name_index = 0
+
 # cube
 onready var cube_new = preload("res://cube.tscn")
+var CUBE = null
+var is_create_cube: bool
+# floor
+onready var floor_new = preload("res://floor.tscn")
+var FLOOR = null
+var is_create_floor: bool
 
-
+export var speed = 0.35
+var default_speed
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("create_menu"):
@@ -40,41 +48,101 @@ func _physics_process(delta):
 		cast_global = raycast.to_global(raycast.get_collision_point())
 		cast = raycast.to_local(raycast.get_collision_point())
 	else:
-		raycast.cast_to.z += 2.5
+		raycast.cast_to.z -= 0.1
 	
 	raycast.get_node("polygon").polygon[0] = Vector2(-cast.z, 0)
 	raycast.get_node("polygon").polygon[1] = Vector2(-cast.z, 0.14)
 	
-	if Input.is_action_just_pressed("restart"):
-		get_tree().reload_current_scene()
 	
-	# for create
-	if is_create_cube:
-		if Input.is_action_just_pressed("ui_select") and raycast.get_collider():
-			cube.transform.origin = camera.cast
-			print(cube)
+		# for create
+	if is_create and raycast.get_collider():
+			# change property
+		if Input.is_action_pressed("position_forward"):
+			if is_create_cube:
+				CUBE.global_transform.origin.z += speed
+			elif is_create_floor:
+				FLOOR.global_transform.origin.z += speed
+		if Input.is_action_pressed("position_backward"):
+			if is_create_cube:
+				CUBE.global_transform.origin.z -= speed
+			elif is_create_floor:
+				FLOOR.global_transform.origin.z -= speed
+		if Input.is_action_pressed("position_left"):
+			if is_create_cube:
+				CUBE.global_transform.origin.x += speed
+			elif is_create_floor:
+				FLOOR.global_transform.origin.x += speed
+		if Input.is_action_pressed("position_right"):
+			if is_create_cube:
+				CUBE.global_transform.origin.x -= speed
+			elif is_create_floor:
+				FLOOR.global_transform.origin.x -= speed
+		
+			# position set
+		if Input.is_action_just_pressed("ui_select"):
+			if is_create_floor:
+				FLOOR.transform.origin = raycast.get_collision_point()
+			elif is_create_cube:
+				CUBE.transform.origin = raycast.get_collision_point()
+			# if exit from create
 		elif Input.is_action_just_pressed("ui_exit"):
-			is_create_cube = false
+			name_index += 1
+			if is_create_cube:
+				is_create_cube = false
+			if is_create_floor:
+				is_create_floor = false
+			is_create = false
+			print(name_index)
+		# check
+		if !is_create_cube and CUBE != null:
+			CUBE.use_collision = true
+			CUBE.name = str(name_index)
+		elif !is_create_floor and FLOOR != null:
+			FLOOR.use_collision = true
+			FLOOR.name = str(name_index)
+		
+	# for speed to positon
+	if Input.is_action_pressed("speed_slow"):
+		speed = 0.05
+	elif Input.is_action_pressed("speed_fast"):
+		speed = 1
+	else:
+		speed = default_speed
 	
-	$check/check2.text = 'true' if is_create_cube else 'false'
-	if is_create_cube:
+	
+						# TEXT #
+	
+	$check/check2.text = 'true' if is_create else 'false'
+	if is_create:
 		$check/check2.add_color_override("font_color", ColorN('red', 1.0))
 	else:
 		$check/check2.add_color_override("font_color", ColorN('blue', 1.0))
-		
+
 
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	default_speed = speed
+	
 	# signals
 	menu_button_cube.connect("button_down", self, "set_cube")
+	menu_button_floor.connect("button_down", self, "set_floor")
 
 
 func set_cube():
-	cube = cube_new.instance()
+	CUBE = cube_new.instance()
 	pressed = false
+	is_create_floor = false
 	is_create_cube = true
-	get_node("/root").add_child(cube)
-	
-	
+	is_create = true
+	get_node("/root").add_child(CUBE)
+
+
+func set_floor():
+	FLOOR = floor_new.instance()
+	pressed = false
+	is_create_cube = false
+	is_create_floor = true
+	is_create = true
+	get_node("/root").add_child(FLOOR)
 

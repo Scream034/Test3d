@@ -1,16 +1,61 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://death_bullet.gd" type="Script" id=1]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.329412, 0.329412, 0.329412, 1 )
-metallic = 1.0
+metallic = 0.51
 
-[node name="mod" type="CSGBox"]
-width = 0.2
-height = 0.2
-depth = 0.2
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 1, 0.470588, 0, 1 )
+depth_enabled = true
+depth_scale = 0.1
+depth_deep_parallax = false
+depth_flip_tangent = false
+depth_flip_binormal = false
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.254902, 0.254902, 0.254902, 1 )
+
+[sub_resource type="CylinderMesh" id=4]
+material = SubResource( 3 )
+top_radius = 0.1
+bottom_radius = 0.326
+height = 0.5
+radial_segments = 16
+rings = 0
+
+[node name="mod" type="CSGCylinder"]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
+use_collision = true
+collision_layer = 2
+collision_mask = 2
+radius = 0.426799
+height = 1.35537
 material = SubResource( 1 )
 script = ExtResource( 1 )
 
 [node name="timer" type="Timer" parent="."]
+
+[node name="back" type="CSGCylinder" parent="."]
+transform = Transform( 1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.772369, 0 )
+operation = 2
+radius = 0.822553
+height = 0.788205
+cone = true
+material = SubResource( 2 )
+
+[node name="back2" type="CSGCylinder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.700777, 0 )
+operation = 2
+radius = 0.822553
+height = 0.788205
+cone = true
+material = SubResource( 2 )
+
+[node name="cone" type="CSGMesh" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00375229, 0.929043, 0.00197005 )
+mesh = SubResource( 4 )
+
+[node name="pos" type="Position3D" parent="."]
+transform = Transform( 0.271332, 0, 0, 0, 0.288024, -8.16542e-09, 0, -8.16542e-09, 0.194622, 0, 1.1404, 1.88912e-10 )

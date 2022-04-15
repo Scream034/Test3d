@@ -26,6 +26,9 @@ export var move_vel: Vector3
 # for create cube
 export var cast: Vector3
 
+# fire
+export var push_strenglth = 0.03
+
 
 func _process(delta):
 	# rotate
@@ -33,10 +36,12 @@ func _process(delta):
 	
 	# fire
 	if Input.is_action_pressed("ui_select") and !is_menu:
+		# recoil start
 		if timer_recoil.is_stopped():
 			timer_recoil.start(0.24)
 		mouse_position = lerp(mouse_position, Vector2(mouse_position.x + mouse_position_recoil, mouse_position.y - 4.5), 0.23)
 		
+		# collision
 		if raycast.get_collider():
 			cast = raycast.get_collision_point()
 			if timer_fire.is_stopped():
@@ -45,6 +50,7 @@ func _process(delta):
 		mouse_position_recoil_switch = 0
 		mouse_position_recoil = 0
 	
+	# recoil
 	if mouse_position_recoil_switch == 1:
 		mouse_position_recoil = 1.25
 	elif mouse_position_recoil_switch == 2:
@@ -109,24 +115,37 @@ func set_position_bullet():
 	var bullet = model.instance()
 	get_node("/root").add_child(bullet)
 	bullet.transform.origin = raycast.get_collision_point()
-	if raycast.get_collider():
-			# add position
-		# to y
-		if raycast.get_collision_normal().y == 1:
-			bullet.transform.origin.y += 0.1
-		elif raycast.get_collision_normal().y == -1:
-			bullet.transform.origin.y -= 0.1
-		#to x
-		elif raycast.get_collision_normal().x == -1:
-			bullet.transform.origin.x -= 0.1
-		elif raycast.get_collision_normal().x == 1:
-			bullet.transform.origin.x += 0.1
-		# to z
-		elif raycast.get_collision_normal().z == 1:
-			bullet.transform.origin.z += 0.1
-		elif raycast.get_collision_normal().z == -1:
-			bullet.transform.origin.z -= 0.1
-		print(raycast.get_collision_normal())
+	
+	var get_coll_norm = Vector3()
+	get_coll_norm.x = round(raycast.get_collision_normal().x)
+	get_coll_norm.y = round(raycast.get_collision_normal().y)
+	get_coll_norm.z = round(raycast.get_collision_normal().z)
+		# add position
+	# to y
+	if get_coll_norm.y == 1:
+		bullet.transform.origin.y -= push_strenglth
+		bullet.rotation_degrees.z = 180
+	elif get_coll_norm.y == -1:
+		bullet.transform.origin.y += push_strenglth
+		bullet.rotation_degrees.z = 0
+	#to x
+	elif get_coll_norm.x == -1:
+		bullet.transform.origin.x += push_strenglth
+		bullet.rotation_degrees.z = -90
+	elif get_coll_norm.x == 1:
+		bullet.transform.origin.x -= push_strenglth
+		bullet.rotation_degrees.z = 90
+	# to z
+	elif get_coll_norm.z == 1:
+		bullet.transform.origin.z -= push_strenglth
+		bullet.rotation_degrees.x = -90
+	elif get_coll_norm.z == -1:
+		bullet.transform.origin.z += push_strenglth
+		bullet.rotation_degrees.x = 90
+	else:
+		bullet.queue_free()
+	print(get_coll_norm)
+		
 
 func set_recoil():
 	if mouse_position_recoil_switch == 0:
@@ -138,5 +157,4 @@ func set_recoil():
 
 func set_mouse_switch_position(pos):
 	mouse_position_recoil_switch = pos
-	print(pos)
 
